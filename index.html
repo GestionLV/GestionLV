@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Avanzado de Gestión de Gastos de Viaje de Luis Vivas</title>
+    <style>
+        :root {
+            --primary-color: #2b3c50;
+            --secondary-color: #4a617c;
+            --bg-color: #f4f6f9;
+            --text-color: #333;
+            --border-color: #c8c8c8;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-section {
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .viajes-manager {
+            background: #eef2f7;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #d0d7de;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .viajes-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        select, input[type="text"], input[type="date"], input[type="number"], input[type="file"] {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .preview-box {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #fff;
+            padding: 10px;
+            border: 1px dashed var(--border-color);
+            border-radius: 4px;
+            display: none;
+        }
+
+        .preview-box img {
+            max-height: 90px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .filtros-bar {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary { background-color: var(--primary-color); color: white; }
+        .btn-primary:hover { background-color: var(--secondary-color); }
+        
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-success:hover { background-color: #218838; }
+
+        .btn-info { background-color: var(--info-color); color: white; }
+        .btn-info:hover { background-color: #138496; }
+
+        .btn-danger { background-color: var(--danger-color); color: white; }
+        .btn-danger:hover { background-color: #c82333; }
+
+        .btn-danger-sm {
+            background-color: var(--danger-color);
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            border-radius: 3px;
+        }
+        .btn-danger-sm:hover { background-color: #bd2130; }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 3px;
+            margin-right: 4px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        tfoot td {
+            background-color: #eef2f7;
+            font-weight: bold;
+            font-size: 1.05rem;
+            border-top: 2px solid var(--primary-color);
+        }
+
+        tr:hover { background-color: #f8f9fa; }
+
+        .thumbnail {
+            width: 70px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        #print-area { display: none; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; }
+            
+            .print-page {
+                width: 215.9mm;
+                height: 279.4mm;
+                page-break-after: always;
+                padding: 12mm 15mm;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                gap: 14mm;
+                background: #fff;
+            }
+            
+            .print-item {
+                width: 100%;
+                height: 112mm;
+                border: 1px dashed #555;
+                padding: 4mm;
+                display: flex;
+                flex-direction: column;
+                gap: 3mm;
+                box-sizing: border-box;
+                page-break-inside: avoid;
+            }
+            
+            .print-meta { 
+                font-size: 11pt; 
+                font-weight: bold; 
+                color: #000;
+                border-bottom: 2px solid #2b3c50;
+                padding-bottom: 1mm;
+                text-transform: uppercase;
+            }
+            
+            .print-img-wrapper { 
+                width: 100%; 
+                height: 98mm; 
+                display: flex; 
+                justify-content: center; 
+                align-items: center; 
+                background: #fafafa;
+            }
+            
+            .print-img { 
+                width: 100%;
+                height: 100%; 
+                object-fit: contain; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-section">
+            <h2>SISTEMA DE CONTROL DE GASTOS Y VIAJES (LUIS VIVAS)</h2>
+            <div>
+                <button onclick="exportarBaseDatosCompleta()" class="btn btn-info btn-sm">📦 Respaldar Todo</button>
+                <button onclick="document.getElementById('import-file').click()" class="btn btn-primary btn-sm">📂 Importar Respaldo</button>
+                <input type="file" id="import-file" accept=".json" style="display:none" onchange="importarBaseDatosCompleta(this)">
+            </div>
+        </div>
+
+        <div class="viajes-manager">
+            <div class="viajes-group">
+                <label for="viaje-selector"><strong>Viaje Activo:</strong></label>
+                <select id="viaje-selector" onchange="cambiarViaje()"></select>
+                <button type="button" onclick="renombrarViajeActual()" class="btn btn-info" style="padding: 5px 10px; font-size:0.8rem;">✏️ Renombrar</button>
+                <button type="button" onclick="eliminarViajeActual()" class="btn btn-danger" style="padding: 5px 10px; font-size:0.8rem;">🗑️ Eliminar Viaje</button>
+            </div>
+            <div class="viajes-group" style="margin-left: auto;">
+                <input type="text" id="nuevo-viaje-nombre" placeholder="Nuevo destino/viaje...">
+                <button type="button" onclick="crearNuevoViaje()" class="btn btn-primary" style="padding: 6px 12px; font-size:0.85rem;">+ Crear</button>
+            </div>
+        </div>
+
+        <form id="gasto-form" onsubmit="agregarGasto(event)">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="fecha">FECHA</label>
+                    <input type="date" id="fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="factura">Nº. FACTURA</label>
+                    <input type="text" id="factura" required placeholder="001-2345">
+                </div>
+                <div class="form-group">
+                    <label for="proveedor">PROVEEDOR</label>
+                    <input type="text" id="proveedor" required placeholder="Razón Social">
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">DESCRIPCIÓN</label>
+                    <input type="text" id="descripcion" required placeholder="Hospedaje, repuestos, etc.">
+                </div>
+                <div class="form-group">
+                    <label for="monto">MONTO (BS.)</label>
+                    <input type="number" step="0.01" id="monto" required placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="foto">FOTO FACTURA</label>
+                    <input type="file" id="foto" accept="image/*" onchange="procesarYPrevisualizarImagen(this)">
+                </div>
+                <div class="preview-box" id="container-preview">
+                    <img id="img-preview" src="" alt="Previsualización">
+                    <div class="preview-text">
+                        <strong>Imagen en Alta Fidelidad.</strong> Redimensionada inteligentemente para maximizar el contraste de letras y firmas en la hoja física.
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btn-registrar-gasto">+ Guardar Gasto en Historial</button>
+        </form>
+
+        <div class="filtros-bar">
+            <strong>Filtros Cronológicos:</strong>
+            <label for="filtro-desde">Desde:</label>
+            <input type="date" id="filtro-desde" onchange="filtrarYCalcular()">
+            <label for="filtro-hasta">Hasta:</label>
+            <input type="date" id="filtro-hasta" onchange="filtrarYCalcular()">
+            <button onclick="limpiarFiltros()" class="btn" style="background:#e0e0e0; padding: 4px 10px; font-size:0.8rem;">Mostrar Todo</button>
+        </div>
+
+        <div class="actions-bar">
+            <button onclick="prepararImpresion()" class="btn btn-success">🖨️ Imprimir Facturas Expandidas (Máx 2 por Hoja)</button>
+            <button onclick="exportarExcelCSV()" class="btn btn-info">📊 Exportar Datos a Excel (.CSV)</button>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ITEM</th>
+                        <th style="width: 120px;">FECHA</th>
+                        <th>Nº. FACTURA</th>
+                        <th>PROVEEDOR</th>
+                        <th>DESCRIPCIÓN</th>
+                        <th>MONTO (BS.)</th>
+                        <th style="width: 90px;">SOPORTE</th>
+                        <th style="width: 160px;">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-cuerpo">
+                    </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" style="text-align: right;">TOTAL ACUMULADO / VISTA:</td>
+                        <td id="total-monto" style="color: var(--primary-color);">Bs. 0,00</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div id="print-area"></div>
+
+    <script>
+        let db;
+        let listaGastos = [];
+        let listaViajes = [];
+        let viajeSeleccionadoId = null;
+        let imagenProcesadaDataUrl = null;
+
+        const request = indexedDB.open("GestionViajesAvanzadaDB", 1);
+
+        request.onupgradeneeded = function(e) {
+            db = e.target.result;
+            if(!db.objectStoreNames.contains("viajes")) db.createObjectStore("viajes", { keyPath: "id", autoIncrement: true });
+            if(!db.objectStoreNames.contains("gastos")) db.createObjectStore("gastos", { keyPath: "id", autoIncrement: true });
+        };
+
+        request.onsuccess = function(e) {
+            db = e.target.result;
+            verificarOInicializarViajes();
+        };
+
+        function verificarOInicializarViajes() {
+            const tx = db.transaction(["viajes"], "readonly");
+            tx.objectStore("viajes").getAll().onsuccess = function(e) {
+                listaViajes = e.target.result;
+                if (listaViajes.length === 0) {
+                    const txW = db.transaction(["viajes"], "readwrite");
+                    txW.objectStore("viajes").add({ nombre: "Viaje General Predeterminado" }).onsuccess = function(ev) {
+                        viajeSeleccionadoId = ev.target.result;
+                        actualizarSelectorViajes();
+                    };
+                } else {
+                    const lastId = localStorage.getItem("u_viaje_id");
+                    const existe = listaViajes.some(v => v.id == lastId);
+                    viajeSeleccionadoId = existe ? parseInt(lastId) : listaViajes[0].id;
+                    actualizarSelectorViajes();
+                }
+            };
+        }
+
+        function actualizarSelectorViajes() {
+            const selector = document.getElementById("viaje-selector");
+            selector.innerHTML = "";
+            db.transaction(["viajes"], "readonly").objectStore("viajes").getAll().onsuccess = function(e) {
+                listaViajes = e.target.result;
+                listaViajes.forEach(v => {
+                    const opt = document.createElement("option");
+                    opt.value = v.id;
+                    opt.textContent = v.nombre;
+                    if(v.id === viajeSeleccionadoId) opt.selected = true;
+                    selector.appendChild(opt);
+                });
+                localStorage.setItem("u_viaje_id", viajeSeleccionadoId);
+                cargarGastosViajeActual();
+            };
+        }
+
+        function crearNuevoViaje() {
+            const input = document.getElementById("nuevo-viaje-nombre");
+            const nombre = input.value.trim();
+            if(!nombre) return;
+            const tx = db.transaction(["viajes"], "readwrite");
+            tx.objectStore("viajes").add({ nombre: nombre }).onsuccess = function(e) {
+                viajeSeleccionadoId = e.target.result;
+                input.value = "";
+                actualizarSelectorViajes();
+            };
+        }
+
+        function renombrarViajeActual() {
+            const selector = document.getElementById("viaje-selector");
+            if(selector.selectedIndex === -1) return;
+            const nombreActual = selector.options[selector.selectedIndex].textContent;
+            const nuevoNombre = prompt("Modificar nombre del viaje:", nombreActual);
+            if (nuevoNombre && nuevoNombre.trim() !== "") {
+                const tx = db.transaction(["viajes"], "readwrite");
+                tx.objectStore("viajes").put({ id: viajeSeleccionadoId, nombre: nuevoNombre.trim() }).onsuccess = function() {
+                    actualizarSelectorViajes();
+                };
+            }
+        }
+
+        function eliminarViajeActual() {
+            if (!viajeSeleccionadoId) return;
+            if (confirm("🚨 ¡ADVERTENCIA CRÍTICA!\n\nAl eliminar este viaje se borrarán de forma permanente todas las facturas y soportes de imágenes asociados.\n¿Desea proceder?")) {
+                const txGastos = db.transaction(["gastos"], "readwrite");
+                const storeGastos = txGastos.objectStore("gastos");
+                
+                listaGastos.forEach(g => {
+                    storeGastos.delete(g.id);
+                });
+
+                txGastos.oncomplete = function() {
+                    const txViaje = db.transaction(["viajes"], "readwrite");
+                    txViaje.objectStore("viajes").delete(viajeSeleccionadoId).onsuccess = function() {
+                        viajeSeleccionadoId = null;
+                        verificarOInicializarViajes();
+                    };
+                };
+            }
+        }
+
+        function cambiarViaje() {
+            viajeSeleccionadoId = parseInt(document.getElementById("viaje-selector").value);
+            localStorage.setItem("u_viaje_id", viajeSeleccionadoId);
+            limpiarFiltros();
+            cargarGastosViajeActual();
+        }
+
+        function cargarGastosViajeActual() {
+            if (!viajeSeleccionadoId) {
+                listaGastos = [];
+                filtrarYCalcular();
+                return;
+            }
+            db.transaction(["gastos"], "readonly").objectStore("gastos").getAll().onsuccess = function(e) {
+                listaGastos = e.target.result.filter(g => g.viajeId === viajeSeleccionadoId);
+                filtrarYCalcular();
+            };
+        }
+
+        function procesarYPrevisualizarImagen(input) {
+            const previewBox = document.getElementById("container-preview");
+            const previewImg = document.getElementById("img-preview");
+            const file = input.files[0];
+
+            if (!file) { return; }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+
+                    const MAX_WIDTH = 1600; 
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    imagenProcesadaDataUrl = canvas.toDataURL("image/jpeg", 0.90);
+                    previewImg.src = imagenProcesadaDataUrl;
+                    previewBox.style.display = "flex";
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function agregarGasto(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById("foto");
+
+            if(!imagenProcesadaDataUrl && fileInput.files.length > 0) {
+                alert("La imagen se está procesando, intente de nuevo en un segundo.");
+                return;
+            }
+
+            const nuevoGasto = {
+                viajeId: viajeSeleccionadoId,
+                fecha: document.getElementById("fecha").value,
+                factura: document.getElementById("factura").value,
+                proveedor: document.getElementById("proveedor").value,
+                descripcion: document.getElementById("descripcion").value,
+                monto: parseFloat(document.getElementById("monto").value),
+                fotoData: imagenProcesadaDataUrl || ""
+            };
+
+            const tx = db.transaction(["gastos"], "readwrite");
+            tx.objectStore("gastos").add(nuevoGasto);
+            tx.oncomplete = function() {
+                document.getElementById("gasto-form").reset();
+                document.getElementById("container-preview").style.display = "none";
+                imagenProcesadaDataUrl = null;
+                cargarGastosViajeActual();
+            };
+        }
+
+        function clonarGasto(gastoOriginal) {
+            const copiaGasto = {
+                viajeId: viajeSeleccionadoId,
+                fecha: gastoOriginal.fecha,
+                factura: gastoOriginal.factura + " - COPIA",
+                proveedor: gastoOriginal.proveedor,
+                descripcion: gastoOriginal.descripcion,
+                monto: gastoOriginal.monto,
+                fotoData: gastoOriginal.fotoData
+            };
+            const tx = db.transaction(["gastos"], "readwrite");
+            tx.objectStore("gastos").add(copiaGasto);
+            tx.oncomplete = function() {
+                cargarGastosViajeActual();
+            };
+        }
+
+        function eliminarGasto(id) {
+            if (confirm("¿Eliminar este gasto y su comprobante?")) {
+                const tx = db.transaction(["gastos"], "readwrite");
+                tx.objectStore("gastos").delete(id);
+                tx.oncomplete = function() {
+                    cargarGastosViajeActual();
+                };
+            }
+        }
+
+        function filtrarYCalcular() {
+            const desde = document.getElementById("filtro-desde").value;
+            const hasta = document.getElementById("filtro-hasta").value;
+            const tbody = document.getElementById("tabla-cuerpo");
+            tbody.innerHTML = "";
+            
+            let total = 0;
+            let itemContador = 1;
+
+            listaGastos.forEach((gasto) => {
+                if(desde && gasto.fecha < desde) return;
+                if(hasta && gasto.fecha > hasta) return;
+
+                total += gasto.monto;
+
+                const fila = document.createElement("tr");
+                const fParts = gasto.fecha.split("-");
+                const fFormateada = fParts.length === 3 ? `${fParts[2]}/${fParts[1]}/${fParts[0]}` : gasto.fecha;
+
+                // Crear fila con escape seguro
+                fila.innerHTML = `
+                    <td>${itemContador++}</td>
+                    <td>${fFormateada}</td>
+                    <td>${gasto.factura}</td>
+                    <td>${gasto.proveedor}</td>
+                    <td>${gasto.descripcion}</td>
+                    <td style="font-weight: bold;">${gasto.monto.toLocaleString('es-VE', {minimumFractionDigits: 2})}</td>
+                    <td>${gasto.fotoData ? `<img src="${gasto.fotoData}" class="thumbnail" id="thumb-${gasto.id}">` : 'Sin Foto'}</td>
+                    <td>
+                        <button class="btn btn-info btn-sm btn-clonar" style="background:#6c757d">Clonar</button>
+                        <button class="btn btn-danger-sm btn-borrar">Borrar</button>
+                    </td>
+                `;
+
+                // Asignar eventos de forma segura para evitar roturas de JSON stringify en HTML attributes
+                if(gasto.fotoData) {
+                    fila.querySelector(`#thumb-${gasto.id}`).addEventListener('click', () => window.open(gasto.fotoData, '_blank'));
+                }
+                fila.querySelector('.btn-clonar').addEventListener('click', () => clonarGasto(gasto));
+                fila.querySelector('.btn-borrar').addEventListener('click', () => eliminarGasto(gasto.id));
+
+                tbody.appendChild(fila);
+            });
+
+            document.getElementById("total-monto").textContent = `Bs. ${total.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
+
+        function limpiarFiltros() {
+            document.getElementById("filtro-desde").value = "";
+            document.getElementById("filtro-hasta").value = "";
+            filtrarYCalcular();
+        }
+
+        function exportarExcelCSV() {
+            const visibles = [];
+            const desde = document.getElementById("filtro-desde").value;
+            const hasta = document.getElementById("filtro-hasta").value;
+            listaGastos.forEach(g => {
+                if((desde && g.fecha < desde) || (hasta && g.fecha > hasta)) return;
+                visibles.push(g);
+            });
+
+            if (visibles.length === 0) return;
+            const selector = document.getElementById("viaje-selector");
+            const nombreViaje = selector.options[selector.selectedIndex].textContent;
+
+            let csv = "\uFEFFINFORME DE VIAJE:, " + nombreViaje + "\n\nITEM,FECHA,Nº. FACTURA,PROVEEDOR,DESCRIPCION,MONTO (BS.)\n";
+            visibles.forEach((g, i) => {
+                const parts = g.fecha.split("-");
+                const f = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : g.fecha;
+                csv += `${i+1},${f},${g.factura},"${g.proveedor.replace(/"/g, '""')}"` +
+                       `,"${g.descripcion.replace(/"/g, '""')}",${g.monto.toFixed(2).replace(".", ",")}\n`;
+            });
+
+            const link = document.createElement("a");
+            link.setAttribute("href", URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" })));
+            link.setAttribute("download", `Gastos_${nombreViaje.replace(/\s+/g, '_')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function prepararImpresion() {
+            const printArea = document.getElementById("print-area");
+            printArea.innerHTML = "";
+            
+            const visibles = [];
+            const desde = document.getElementById("filtro-desde").value;
+            const hasta = document.getElementById("filtro-hasta").value;
+            listaGastos.forEach(g => {
+                if((desde && g.fecha < desde) || (hasta && g.fecha > hasta)) return;
+                if(g.fotoData) visibles.push(g);
+            });
+
+            if (visibles.length === 0) { alert("No hay comprobantes con imágenes en la vista actual para imprimir."); return; }
+
+            let paginaActual = null;
+            const itemsPorHoja = 2;
+
+            visibles.forEach((gasto, index) => {
+                if (index % itemsPorHoja === 0) {
+                    paginaActual = document.createElement("div");
+                    paginaActual.className = "print-page";
+                    printArea.appendChild(paginaActual);
+                }
+
+                const parts = gasto.fecha.split("-");
+                const fFormateada = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : gasto.fecha;
+
+                const printItem = document.createElement("div");
+                printItem.className = "print-item";
+                printItem.innerHTML = `
+                    <div class="print-meta">
+                        ITEM: ${index + 1} | FACTURA: ${gasto.factura} | FECHA: ${fFormateada} | PROVEEDOR: ${gasto.proveedor} | MONTO: Bs. ${gasto.monto.toLocaleString('es-VE', {minimumFractionDigits: 2})}
+                    </div>
+                    <div class="print-img-wrapper">
+                        <img src="${gasto.fotoData}" class="print-img">
+                    </div>
+                `;
+                paginaActual.appendChild(printItem);
+            });
+
+            window.print();
+        }
+
+        function exportarBaseDatosCompleta() {
+            const backup = {};
+            db.transaction(["viajes"], "readonly").objectStore("viajes").getAll().onsuccess = function(e1) {
+                backup.viajes = e1.target.result;
+                db.transaction(["gastos"], "readonly").objectStore("gastos").getAll().onsuccess = function(e2) {
+                    backup.gastos = e2.target.result;
+                    
+                    const blob = new Blob([JSON.stringify(backup)], {type: "application/json"});
+                    const link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = `RESPALDO_GLOBAL_SISTEMA_GASTOS_${new Date().toISOString().slice(0,10)}.json`;
+                    link.click();
+                };
+            };
+        }
+
+        function importarBaseDatosCompleta(input) {
+            const file = input.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if(!data.viajes || !data.gastos) { alert("Formato de archivo inválido."); return; }
+                    
+                    if(confirm("Esta acción combinará e importará todos los viajes y facturas del archivo de respaldo. ¿Desea continuar?")) {
+                        const txV = db.transaction(["viajes"], "readwrite");
+                        const storeV = txV.objectStore("viajes");
+                        data.viajes.forEach(v => storeV.put(v));
+                        
+                        txV.oncomplete = function() {
+                            const txG = db.transaction(["gastos"], "readwrite");
+                            const storeG = txG.objectStore("gastos");
+                            data.gastos.forEach(g => storeG.put(g));
+                            
+                            txG.oncomplete = function() {
+                                alert("Base de datos restaurada e importada con éxito.");
+                                verificarOInicializarViajes();
+                            };
+                        };
+                    }
+                } catch(err) {
+                    alert("Error al leer el archivo de respaldo.");
+                }
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
