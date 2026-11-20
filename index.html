@@ -14,6 +14,7 @@
             --danger-color: #dc3545;
             --success-color: #28a745;
             --info-color: #17a2b8;
+            --warning-color: #e0a800;
         }
 
         * {
@@ -45,13 +46,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .viajes-manager {
             background: #eef2f7;
             padding: 15px;
             border-radius: 6px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 1px solid #d0d7de;
             display: flex;
             flex-wrap: wrap;
@@ -63,7 +66,63 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
+
+        .presupuesto-panel {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .asignacion-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .asignacion-control label {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 0.92rem;
+        }
+
+        .resumen-viaje {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .resumen-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .resumen-item span:first-child {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: bold;
+        }
+
+        .resumen-item span:last-child {
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .saldo-positivo { color: var(--success-color); }
+        .saldo-negativo { color: var(--danger-color); }
+        .saldo-neutro { color: var(--primary-color); }
 
         select, input[type="text"], input[type="date"], input[type="number"], input[type="file"] {
             padding: 8px;
@@ -80,7 +139,12 @@
             padding: 20px;
             border-radius: 6px;
             border: 1px solid #e9ecef;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid.editando {
+            background: #fffbeb;
+            border-color: #f59e0b;
         }
 
         .form-group {
@@ -97,20 +161,46 @@
 
         .preview-box {
             grid-column: 1 / -1;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: #fff;
+            padding: 12px 15px;
+            border: 1px dashed var(--secondary-color);
+            border-radius: 6px;
+            flex-wrap: wrap;
+        }
+
+        .preview-left {
             display: flex;
             align-items: center;
             gap: 15px;
-            background: #fff;
-            padding: 10px;
-            border: 1px dashed var(--border-color);
-            border-radius: 4px;
-            display: none;
+            flex-wrap: wrap;
         }
 
         .preview-box img {
-            max-height: 90px;
+            max-height: 180px;
+            max-width: 280px;
+            object-fit: contain;
             border-radius: 4px;
             border: 1px solid var(--border-color);
+            background: #fafafa;
+            cursor: pointer;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .filtros-bar {
@@ -122,6 +212,7 @@
             align-items: center;
             gap: 15px;
             font-size: 0.9rem;
+            flex-wrap: wrap;
         }
 
         .actions-bar {
@@ -143,12 +234,18 @@
 
         .btn-primary { background-color: var(--primary-color); color: white; }
         .btn-primary:hover { background-color: var(--secondary-color); }
-        
+
         .btn-success { background-color: var(--success-color); color: white; }
         .btn-success:hover { background-color: #218838; }
 
         .btn-info { background-color: var(--info-color); color: white; }
         .btn-info:hover { background-color: #138496; }
+
+        .btn-warning { background-color: var(--warning-color); color: #212529; }
+        .btn-warning:hover { background-color: #c69500; }
+
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; }
 
         .btn-danger { background-color: var(--danger-color); color: white; }
         .btn-danger:hover { background-color: #c82333; }
@@ -159,14 +256,18 @@
             padding: 5px 10px;
             font-size: 0.8rem;
             border-radius: 3px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
         }
         .btn-danger-sm:hover { background-color: #bd2130; }
 
         .btn-sm {
-            padding: 4px 8px;
+            padding: 5px 9px;
             font-size: 0.8rem;
             border-radius: 3px;
             margin-right: 4px;
+            margin-bottom: 3px;
         }
 
         .table-responsive {
@@ -203,6 +304,7 @@
         }
 
         tr:hover { background-color: #f8f9fa; }
+        tr.fila-editando { background-color: #fef3c7; }
 
         .thumbnail {
             width: 70px;
@@ -219,7 +321,7 @@
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
             #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; }
-            
+
             .print-page {
                 width: 215.9mm;
                 height: 279.4mm;
@@ -228,45 +330,49 @@
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
-                justify-content: flex-start;
-                gap: 14mm;
+                justify-content: stretch;
                 background: #fff;
             }
-            
+
+            .print-page:last-child {
+                page-break-after: auto;
+            }
+
             .print-item {
                 width: 100%;
-                height: 112mm;
+                height: 100%;
                 border: 1px dashed #555;
-                padding: 4mm;
+                padding: 5mm;
                 display: flex;
                 flex-direction: column;
-                gap: 3mm;
+                gap: 4mm;
                 box-sizing: border-box;
                 page-break-inside: avoid;
             }
-            
-            .print-meta { 
-                font-size: 11pt; 
-                font-weight: bold; 
+
+            .print-meta {
+                font-size: 11.5pt;
+                font-weight: bold;
                 color: #000;
                 border-bottom: 2px solid #2b3c50;
-                padding-bottom: 1mm;
+                padding-bottom: 2mm;
                 text-transform: uppercase;
             }
-            
-            .print-img-wrapper { 
-                width: 100%; 
-                height: 98mm; 
-                display: flex; 
-                justify-content: center; 
-                align-items: center; 
+
+            .print-img-wrapper {
+                width: 100%;
+                flex: 1;
+                min-height: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 background: #fafafa;
             }
-            
-            .print-img { 
+
+            .print-img {
                 width: 100%;
-                height: 100%; 
-                object-fit: contain; 
+                height: 100%;
+                object-fit: contain;
             }
         }
     </style>
@@ -292,12 +398,35 @@
             </div>
             <div class="viajes-group" style="margin-left: auto;">
                 <input type="text" id="nuevo-viaje-nombre" placeholder="Nuevo destino/viaje...">
+                <input type="number" step="0.01" min="0" id="nuevo-viaje-asignado" placeholder="Monto asignado (Bs.)" style="width: 175px;">
                 <button type="button" onclick="crearNuevoViaje()" class="btn btn-primary" style="padding: 6px 12px; font-size:0.85rem;">+ Crear</button>
             </div>
         </div>
 
-        <form id="gasto-form" onsubmit="agregarGasto(event)">
-            <div class="form-grid">
+        <div class="presupuesto-panel">
+            <div class="asignacion-control">
+                <label for="monto-asignado-viaje">💰 DINERO ASIGNADO AL VIAJE (BS.):</label>
+                <input type="number" step="0.01" min="0" id="monto-asignado-viaje" placeholder="0.00" style="width: 165px;" onchange="guardarMontoAsignadoViaje()">
+                <button type="button" onclick="guardarMontoAsignadoViaje()" class="btn btn-success" style="padding: 7px 14px; font-size: 0.85rem;">Guardar Asignación</button>
+            </div>
+            <div class="resumen-viaje">
+                <div class="resumen-item">
+                    <span>Asignado</span>
+                    <span id="resumen-asignado" class="saldo-neutro">Bs. 0,00</span>
+                </div>
+                <div class="resumen-item">
+                    <span>Total Gastado</span>
+                    <span id="resumen-gastado" class="saldo-neutro">Bs. 0,00</span>
+                </div>
+                <div class="resumen-item">
+                    <span>Saldo Disponible</span>
+                    <span id="resumen-saldo" class="saldo-positivo">Bs. 0,00</span>
+                </div>
+            </div>
+        </div>
+
+        <form id="gasto-form" onsubmit="guardarGasto(event)">
+            <div class="form-grid" id="form-grid-box">
                 <div class="form-group">
                     <label for="fecha">FECHA</label>
                     <input type="date" id="fecha" required>
@@ -323,13 +452,25 @@
                     <input type="file" id="foto" accept="image/*" onchange="procesarYPrevisualizarImagen(this)">
                 </div>
                 <div class="preview-box" id="container-preview">
-                    <img id="img-preview" src="" alt="Previsualización">
-                    <div class="preview-text">
-                        <strong>Imagen en Alta Fidelidad.</strong> Redimensionada inteligentemente para maximizar el contraste de letras y firmas en la hoja física.
+                    <div class="preview-left">
+                        <img id="img-preview" src="" alt="Previsualización de factura" title="Clic para ver en tamaño completo">
+                        <div class="preview-text">
+                            <strong id="preview-titulo">Vista previa de la factura</strong>
+                            <p style="font-size: 0.85rem; color: #555; margin-top: 3px;">
+                                Verifica que el texto y los montos sean legibles. Si te equivocaste o no se ve bien, puedes cambiarla antes de guardar.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="preview-actions">
+                        <button type="button" onclick="document.getElementById('foto').click()" class="btn btn-warning btn-sm">🔄 Cambiar foto</button>
+                        <button type="button" onclick="quitarFotoActual()" class="btn btn-danger-sm">✖ Quitar foto</button>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary" id="btn-registrar-gasto">+ Guardar Gasto en Historial</button>
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary" id="btn-registrar-gasto">+ Guardar Gasto en Historial</button>
+                <button type="button" class="btn btn-secondary" id="btn-cancelar-edicion" style="display: none;" onclick="cancelarEdicion()">Cancelar Edición</button>
+            </div>
         </form>
 
         <div class="filtros-bar">
@@ -342,7 +483,7 @@
         </div>
 
         <div class="actions-bar">
-            <button onclick="prepararImpresion()" class="btn btn-success">🖨️ Imprimir Facturas Expandidas (Máx 2 por Hoja)</button>
+            <button onclick="prepararImpresion()" class="btn btn-success">🖨️ Imprimir Facturas Expandidas (1 por Hoja)</button>
             <button onclick="exportarExcelCSV()" class="btn btn-info">📊 Exportar Datos a Excel (.CSV)</button>
         </div>
 
@@ -357,11 +498,11 @@
                         <th>DESCRIPCIÓN</th>
                         <th>MONTO (BS.)</th>
                         <th style="width: 90px;">SOPORTE</th>
-                        <th style="width: 160px;">ACCIONES</th>
+                        <th style="width: 210px;">ACCIONES</th>
                     </tr>
                 </thead>
                 <tbody id="tabla-cuerpo">
-                    </tbody>
+                </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="5" style="text-align: right;">TOTAL ACUMULADO / VISTA:</td>
@@ -381,6 +522,7 @@
         let listaViajes = [];
         let viajeSeleccionadoId = null;
         let imagenProcesadaDataUrl = null;
+        let gastoEnEdicionId = null;
 
         const request = indexedDB.open("GestionViajesAvanzadaDB", 1);
 
@@ -395,13 +537,18 @@
             verificarOInicializarViajes();
         };
 
+        function formatearBs(valor) {
+            const num = Number(valor) || 0;
+            return `Bs. ${num.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
         function verificarOInicializarViajes() {
             const tx = db.transaction(["viajes"], "readonly");
             tx.objectStore("viajes").getAll().onsuccess = function(e) {
                 listaViajes = e.target.result;
                 if (listaViajes.length === 0) {
                     const txW = db.transaction(["viajes"], "readwrite");
-                    txW.objectStore("viajes").add({ nombre: "Viaje General Predeterminado" }).onsuccess = function(ev) {
+                    txW.objectStore("viajes").add({ nombre: "Viaje General Predeterminado", montoAsignado: 0 }).onsuccess = function(ev) {
                         viajeSeleccionadoId = ev.target.result;
                         actualizarSelectorViajes();
                     };
@@ -427,30 +574,97 @@
                     selector.appendChild(opt);
                 });
                 localStorage.setItem("u_viaje_id", viajeSeleccionadoId);
+                sincronizarInputMontoAsignado();
                 cargarGastosViajeActual();
             };
         }
 
+        function obtenerViajeActual() {
+            return listaViajes.find(v => v.id === viajeSeleccionadoId) || null;
+        }
+
+        function sincronizarInputMontoAsignado() {
+            const viaje = obtenerViajeActual();
+            const inputAsignado = document.getElementById("monto-asignado-viaje");
+            if (viaje) {
+                const asignado = Number(viaje.montoAsignado) || 0;
+                inputAsignado.value = asignado > 0 ? asignado : "";
+            } else {
+                inputAsignado.value = "";
+            }
+        }
+
+        function guardarMontoAsignadoViaje() {
+            const viaje = obtenerViajeActual();
+            if (!viaje) return;
+
+            const rawVal = document.getElementById("monto-asignado-viaje").value;
+            const nuevoMonto = rawVal === "" ? 0 : Math.max(0, parseFloat(rawVal) || 0);
+
+            const viajeActualizado = {
+                ...viaje,
+                montoAsignado: nuevoMonto
+            };
+
+            const tx = db.transaction(["viajes"], "readwrite");
+            tx.objectStore("viajes").put(viajeActualizado).onsuccess = function() {
+                viaje.montoAsignado = nuevoMonto;
+                actualizarResumenPresupuesto(calcularTotalVistaActual());
+            };
+        }
+
+        function calcularTotalVistaActual() {
+            const desde = document.getElementById("filtro-desde").value;
+            const hasta = document.getElementById("filtro-hasta").value;
+            let total = 0;
+            listaGastos.forEach(gasto => {
+                if (desde && gasto.fecha < desde) return;
+                if (hasta && gasto.fecha > hasta) return;
+                total += Number(gasto.monto) || 0;
+            });
+            return total;
+        }
+
+        function actualizarResumenPresupuesto(totalGastado) {
+            const viaje = obtenerViajeActual();
+            const asignado = viaje ? (Number(viaje.montoAsignado) || 0) : 0;
+            const saldo = asignado - totalGastado;
+
+            document.getElementById("resumen-asignado").textContent = formatearBs(asignado);
+            document.getElementById("resumen-gastado").textContent = formatearBs(totalGastado);
+
+            const saldoEl = document.getElementById("resumen-saldo");
+            saldoEl.textContent = formatearBs(saldo);
+            saldoEl.className = saldo < 0 ? "saldo-negativo" : "saldo-positivo";
+        }
+
         function crearNuevoViaje() {
             const input = document.getElementById("nuevo-viaje-nombre");
+            const inputAsignado = document.getElementById("nuevo-viaje-asignado");
             const nombre = input.value.trim();
             if(!nombre) return;
+            const montoAsignado = inputAsignado.value === "" ? 0 : Math.max(0, parseFloat(inputAsignado.value) || 0);
+
             const tx = db.transaction(["viajes"], "readwrite");
-            tx.objectStore("viajes").add({ nombre: nombre }).onsuccess = function(e) {
+            tx.objectStore("viajes").add({ nombre: nombre, montoAsignado: montoAsignado }).onsuccess = function(e) {
                 viajeSeleccionadoId = e.target.result;
                 input.value = "";
+                inputAsignado.value = "";
+                cancelarEdicion();
                 actualizarSelectorViajes();
             };
         }
 
         function renombrarViajeActual() {
-            const selector = document.getElementById("viaje-selector");
-            if(selector.selectedIndex === -1) return;
-            const nombreActual = selector.options[selector.selectedIndex].textContent;
-            const nuevoNombre = prompt("Modificar nombre del viaje:", nombreActual);
+            const viaje = obtenerViajeActual();
+            if(!viaje) return;
+            const nuevoNombre = prompt("Modificar nombre del viaje:", viaje.nombre);
             if (nuevoNombre && nuevoNombre.trim() !== "") {
                 const tx = db.transaction(["viajes"], "readwrite");
-                tx.objectStore("viajes").put({ id: viajeSeleccionadoId, nombre: nuevoNombre.trim() }).onsuccess = function() {
+                tx.objectStore("viajes").put({
+                    ...viaje,
+                    nombre: nuevoNombre.trim()
+                }).onsuccess = function() {
                     actualizarSelectorViajes();
                 };
             }
@@ -461,7 +675,7 @@
             if (confirm("🚨 ¡ADVERTENCIA CRÍTICA!\n\nAl eliminar este viaje se borrarán de forma permanente todas las facturas y soportes de imágenes asociados.\n¿Desea proceder?")) {
                 const txGastos = db.transaction(["gastos"], "readwrite");
                 const storeGastos = txGastos.objectStore("gastos");
-                
+
                 listaGastos.forEach(g => {
                     storeGastos.delete(g.id);
                 });
@@ -470,6 +684,7 @@
                     const txViaje = db.transaction(["viajes"], "readwrite");
                     txViaje.objectStore("viajes").delete(viajeSeleccionadoId).onsuccess = function() {
                         viajeSeleccionadoId = null;
+                        cancelarEdicion();
                         verificarOInicializarViajes();
                     };
                 };
@@ -479,6 +694,8 @@
         function cambiarViaje() {
             viajeSeleccionadoId = parseInt(document.getElementById("viaje-selector").value);
             localStorage.setItem("u_viaje_id", viajeSeleccionadoId);
+            cancelarEdicion();
+            sincronizarInputMontoAsignado();
             limpiarFiltros();
             cargarGastosViajeActual();
         }
@@ -495,11 +712,27 @@
             };
         }
 
-        function procesarYPrevisualizarImagen(input) {
+        function mostrarPrevisualizacion(dataUrl, esNueva = true) {
             const previewBox = document.getElementById("container-preview");
             const previewImg = document.getElementById("img-preview");
-            const file = input.files[0];
+            const previewTitulo = document.getElementById("preview-titulo");
 
+            if (!dataUrl) {
+                previewBox.style.display = "none";
+                previewImg.src = "";
+                return;
+            }
+
+            previewImg.src = dataUrl;
+            previewImg.onclick = () => window.open(dataUrl, '_blank');
+            previewTitulo.textContent = esNueva
+                ? "Nueva imagen lista (Alta Fidelidad)"
+                : "Comprobante actual guardado";
+            previewBox.style.display = "flex";
+        }
+
+        function procesarYPrevisualizarImagen(input) {
+            const file = input.files[0];
             if (!file) { return; }
 
             const reader = new FileReader();
@@ -510,7 +743,7 @@
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
 
-                    const MAX_WIDTH = 1600; 
+                    const MAX_WIDTH = 1600;
                     let width = img.width;
                     let height = img.height;
 
@@ -522,25 +755,68 @@
                     canvas.width = width;
                     canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
-                    
+
                     imagenProcesadaDataUrl = canvas.toDataURL("image/jpeg", 0.90);
-                    previewImg.src = imagenProcesadaDataUrl;
-                    previewBox.style.display = "flex";
+                    mostrarPrevisualizacion(imagenProcesadaDataUrl, true);
                 };
             };
             reader.readAsDataURL(file);
         }
 
-        function agregarGasto(e) {
+        function quitarFotoActual() {
+            imagenProcesadaDataUrl = "";
+            document.getElementById("foto").value = "";
+            mostrarPrevisualizacion(null);
+        }
+
+        function iniciarEdicionGasto(gasto) {
+            gastoEnEdicionId = gasto.id;
+            document.getElementById("fecha").value = gasto.fecha;
+            document.getElementById("factura").value = gasto.factura;
+            document.getElementById("proveedor").value = gasto.proveedor;
+            document.getElementById("descripcion").value = gasto.descripcion;
+            document.getElementById("monto").value = gasto.monto;
+            document.getElementById("foto").value = "";
+
+            imagenProcesadaDataUrl = gasto.fotoData || "";
+            if (imagenProcesadaDataUrl) {
+                mostrarPrevisualizacion(imagenProcesadaDataUrl, false);
+            } else {
+                mostrarPrevisualizacion(null);
+            }
+
+            document.getElementById("form-grid-box").classList.add("editando");
+            const btnSubmit = document.getElementById("btn-registrar-gasto");
+            btnSubmit.textContent = "💾 Actualizar Gasto";
+            btnSubmit.className = "btn btn-warning";
+            document.getElementById("btn-cancelar-edicion").style.display = "inline-block";
+            filtrarYCalcular();
+            document.getElementById("gasto-form").scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        function cancelarEdicion() {
+            gastoEnEdicionId = null;
+            imagenProcesadaDataUrl = null;
+            document.getElementById("gasto-form").reset();
+            document.getElementById("form-grid-box").classList.remove("editando");
+            const btnSubmit = document.getElementById("btn-registrar-gasto");
+            btnSubmit.textContent = "+ Guardar Gasto en Historial";
+            btnSubmit.className = "btn btn-primary";
+            document.getElementById("btn-cancelar-edicion").style.display = "none";
+            mostrarPrevisualizacion(null);
+            filtrarYCalcular();
+        }
+
+        function guardarGasto(e) {
             e.preventDefault();
             const fileInput = document.getElementById("foto");
 
-            if(!imagenProcesadaDataUrl && fileInput.files.length > 0) {
+            if(imagenProcesadaDataUrl === null && fileInput.files.length > 0) {
                 alert("La imagen se está procesando, intente de nuevo en un segundo.");
                 return;
             }
 
-            const nuevoGasto = {
+            const datosGasto = {
                 viajeId: viajeSeleccionadoId,
                 fecha: document.getElementById("fecha").value,
                 factura: document.getElementById("factura").value,
@@ -551,11 +827,17 @@
             };
 
             const tx = db.transaction(["gastos"], "readwrite");
-            tx.objectStore("gastos").add(nuevoGasto);
+            const store = tx.objectStore("gastos");
+
+            if (gastoEnEdicionId !== null) {
+                datosGasto.id = gastoEnEdicionId;
+                store.put(datosGasto);
+            } else {
+                store.add(datosGasto);
+            }
+
             tx.oncomplete = function() {
-                document.getElementById("gasto-form").reset();
-                document.getElementById("container-preview").style.display = "none";
-                imagenProcesadaDataUrl = null;
+                cancelarEdicion();
                 cargarGastosViajeActual();
             };
         }
@@ -582,6 +864,9 @@
                 const tx = db.transaction(["gastos"], "readwrite");
                 tx.objectStore("gastos").delete(id);
                 tx.oncomplete = function() {
+                    if (gastoEnEdicionId === id) {
+                        cancelarEdicion();
+                    }
                     cargarGastosViajeActual();
                 };
             }
@@ -592,7 +877,7 @@
             const hasta = document.getElementById("filtro-hasta").value;
             const tbody = document.getElementById("tabla-cuerpo");
             tbody.innerHTML = "";
-            
+
             let total = 0;
             let itemContador = 1;
 
@@ -600,38 +885,43 @@
                 if(desde && gasto.fecha < desde) return;
                 if(hasta && gasto.fecha > hasta) return;
 
-                total += gasto.monto;
+                total += Number(gasto.monto) || 0;
 
                 const fila = document.createElement("tr");
+                if (gasto.id === gastoEnEdicionId) {
+                    fila.classList.add("fila-editando");
+                }
+
                 const fParts = gasto.fecha.split("-");
                 const fFormateada = fParts.length === 3 ? `${fParts[2]}/${fParts[1]}/${fParts[0]}` : gasto.fecha;
 
-                // Crear fila con escape seguro
                 fila.innerHTML = `
                     <td>${itemContador++}</td>
                     <td>${fFormateada}</td>
                     <td>${gasto.factura}</td>
                     <td>${gasto.proveedor}</td>
                     <td>${gasto.descripcion}</td>
-                    <td style="font-weight: bold;">${gasto.monto.toLocaleString('es-VE', {minimumFractionDigits: 2})}</td>
+                    <td style="font-weight: bold;">${Number(gasto.monto).toLocaleString('es-VE', {minimumFractionDigits: 2})}</td>
                     <td>${gasto.fotoData ? `<img src="${gasto.fotoData}" class="thumbnail" id="thumb-${gasto.id}">` : 'Sin Foto'}</td>
                     <td>
+                        <button class="btn btn-warning btn-sm btn-editar">Editar</button>
                         <button class="btn btn-info btn-sm btn-clonar" style="background:#6c757d">Clonar</button>
                         <button class="btn btn-danger-sm btn-borrar">Borrar</button>
                     </td>
                 `;
 
-                // Asignar eventos de forma segura para evitar roturas de JSON stringify en HTML attributes
                 if(gasto.fotoData) {
                     fila.querySelector(`#thumb-${gasto.id}`).addEventListener('click', () => window.open(gasto.fotoData, '_blank'));
                 }
+                fila.querySelector('.btn-editar').addEventListener('click', () => iniciarEdicionGasto(gasto));
                 fila.querySelector('.btn-clonar').addEventListener('click', () => clonarGasto(gasto));
                 fila.querySelector('.btn-borrar').addEventListener('click', () => eliminarGasto(gasto.id));
 
                 tbody.appendChild(fila);
             });
 
-            document.getElementById("total-monto").textContent = `Bs. ${total.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById("total-monto").textContent = formatearBs(total);
+            actualizarResumenPresupuesto(total);
         }
 
         function limpiarFiltros() {
@@ -652,13 +942,21 @@
             if (visibles.length === 0) return;
             const selector = document.getElementById("viaje-selector");
             const nombreViaje = selector.options[selector.selectedIndex].textContent;
+            const viaje = obtenerViajeActual();
+            const asignado = viaje ? (Number(viaje.montoAsignado) || 0) : 0;
+            const totalGastado = visibles.reduce((acc, item) => acc + (Number(item.monto) || 0), 0);
+            const saldo = asignado - totalGastado;
 
-            let csv = "\uFEFFINFORME DE VIAJE:, " + nombreViaje + "\n\nITEM,FECHA,Nº. FACTURA,PROVEEDOR,DESCRIPCION,MONTO (BS.)\n";
+            let csv = "\uFEFFINFORME DE VIAJE:," + `"${nombreViaje.replace(/"/g, '""')}"` + "\n";
+            csv += `MONTO ASIGNADO:,${asignado.toFixed(2).replace(".", ",")}\n`;
+            csv += `TOTAL GASTADO:,${totalGastado.toFixed(2).replace(".", ",")}\n`;
+            csv += `SALDO DISPONIBLE:,${saldo.toFixed(2).replace(".", ",")}\n\n`;
+            csv += "ITEM,FECHA,Nº. FACTURA,PROVEEDOR,DESCRIPCION,MONTO (BS.)\n";
             visibles.forEach((g, i) => {
                 const parts = g.fecha.split("-");
                 const f = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : g.fecha;
                 csv += `${i+1},${f},${g.factura},"${g.proveedor.replace(/"/g, '""')}"` +
-                       `,"${g.descripcion.replace(/"/g, '""')}",${g.monto.toFixed(2).replace(".", ",")}\n`;
+                       `,"${g.descripcion.replace(/"/g, '""')}",${Number(g.monto).toFixed(2).replace(".", ",")}\n`;
             });
 
             const link = document.createElement("a");
@@ -672,7 +970,7 @@
         function prepararImpresion() {
             const printArea = document.getElementById("print-area");
             printArea.innerHTML = "";
-            
+
             const visibles = [];
             const desde = document.getElementById("filtro-desde").value;
             const hasta = document.getElementById("filtro-hasta").value;
@@ -683,15 +981,10 @@
 
             if (visibles.length === 0) { alert("No hay comprobantes con imágenes en la vista actual para imprimir."); return; }
 
-            let paginaActual = null;
-            const itemsPorHoja = 2;
-
             visibles.forEach((gasto, index) => {
-                if (index % itemsPorHoja === 0) {
-                    paginaActual = document.createElement("div");
-                    paginaActual.className = "print-page";
-                    printArea.appendChild(paginaActual);
-                }
+                const paginaActual = document.createElement("div");
+                paginaActual.className = "print-page";
+                printArea.appendChild(paginaActual);
 
                 const parts = gasto.fecha.split("-");
                 const fFormateada = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : gasto.fecha;
@@ -700,7 +993,7 @@
                 printItem.className = "print-item";
                 printItem.innerHTML = `
                     <div class="print-meta">
-                        ITEM: ${index + 1} | FACTURA: ${gasto.factura} | FECHA: ${fFormateada} | PROVEEDOR: ${gasto.proveedor} | MONTO: Bs. ${gasto.monto.toLocaleString('es-VE', {minimumFractionDigits: 2})}
+                        ITEM: ${index + 1} | FACTURA: ${gasto.factura} | FECHA: ${fFormateada} | PROVEEDOR: ${gasto.proveedor} | MONTO: Bs. ${Number(gasto.monto).toLocaleString('es-VE', {minimumFractionDigits: 2})}
                     </div>
                     <div class="print-img-wrapper">
                         <img src="${gasto.fotoData}" class="print-img">
@@ -718,7 +1011,7 @@
                 backup.viajes = e1.target.result;
                 db.transaction(["gastos"], "readonly").objectStore("gastos").getAll().onsuccess = function(e2) {
                     backup.gastos = e2.target.result;
-                    
+
                     const blob = new Blob([JSON.stringify(backup)], {type: "application/json"});
                     const link = document.createElement("a");
                     link.href = URL.createObjectURL(blob);
@@ -736,19 +1029,20 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     if(!data.viajes || !data.gastos) { alert("Formato de archivo inválido."); return; }
-                    
+
                     if(confirm("Esta acción combinará e importará todos los viajes y facturas del archivo de respaldo. ¿Desea continuar?")) {
                         const txV = db.transaction(["viajes"], "readwrite");
                         const storeV = txV.objectStore("viajes");
                         data.viajes.forEach(v => storeV.put(v));
-                        
+
                         txV.oncomplete = function() {
                             const txG = db.transaction(["gastos"], "readwrite");
                             const storeG = txG.objectStore("gastos");
                             data.gastos.forEach(g => storeG.put(g));
-                            
+
                             txG.oncomplete = function() {
                                 alert("Base de datos restaurada e importada con éxito.");
+                                cancelarEdicion();
                                 verificarOInicializarViajes();
                             };
                         };
